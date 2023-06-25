@@ -1,5 +1,0 @@
-function init(self)
-    print("Hello:", msg.url(), go.get_id())
-end
-
-

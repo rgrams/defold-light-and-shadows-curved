@@ -12,6 +12,9 @@ uniform highp mat4 mtx_view;
 uniform highp mat4 mtx_proj;
 uniform highp mat4 mtx_normal;
 
+uniform highp vec4 curve_origin;
+uniform mediump vec4 curve;
+
 varying highp vec4 var_view_pos;
 // varying highp vec3 var_vert_pos;
 varying highp vec4 var_position;
@@ -21,8 +24,14 @@ varying highp mat4 vmtx_view;
 
 void main()
 {
+    vec4 wpos = vec4(position.xyz, 1.0);
+    vec4 to_cam = curve_origin - wpos;
+    float kz = to_cam.z*to_cam.z;
+    float kx = to_cam.x*to_cam.x;
+    wpos.y = wpos.y - kz*curve.z - kx*curve.x;
+    wpos.x = wpos.x - kz*curve.w;
 
-    vec4 p = mtx_view * vec4(position.xyz, 1.0);
+    vec4 p = mtx_view * wpos;
     var_view_pos = p;
     // var_vert_pos = normalize(-vec3(p));
     var_position = position;
@@ -31,6 +40,4 @@ void main()
     var_normal = normalize(normal);
     // var_normal = normalize((mtx_normal * vec4(normal, 0.0)).xyz);
     gl_Position = mtx_proj * p;
-  
 }
-

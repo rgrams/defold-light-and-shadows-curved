@@ -8,6 +8,9 @@ varying lowp vec4 var_shadow_color;
 varying lowp vec4 var_layer_mask;
 varying lowp float var_is_single_layer;
 
+uniform highp vec4 curve_origin;
+uniform mediump vec4 curve;
+
 // positions are in world space
 attribute mediump vec4 position;
 attribute mediump vec2 texcoord0;
@@ -19,12 +22,19 @@ varying highp vec4 var_view_position;
 
 void main()
 {
+    vec4 wpos = vec4(position.xyz, 1.0);
+    vec4 to_cam = curve_origin - wpos;
+    float kz = to_cam.z*to_cam.z;
+    float kx = to_cam.x*to_cam.x;
+    wpos.y = wpos.y - kz*curve.z - kx*curve.x;
+    wpos.x = wpos.x - kz*curve.w;
+
     var_texcoord0 = texcoord0;
     var_face_color = face_color;
     var_outline_color = outline_color;
     var_layer_mask.rgb = layer_mask;
     var_layer_mask.a = var_layer_mask.x * var_layer_mask.y * var_layer_mask.z;
     var_shadow_color = shadow_color;
-    gl_Position = view_proj * vec4(position.x, position.y, position.z, 1.0);
+    gl_Position = view_proj * wpos;
     var_view_position = mtx_view * position;
 }

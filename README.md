@@ -1,3 +1,11 @@
+# Light and Shadows - Curved
+
+This fork is slightly modified from the Dragosha's original to demonstrate a [curved world](https://github.com/rgrams/defold-curved-world) shader effect.
+
+Try the web demo here: https://rgrams.github.io/defold-light-and-shadows-curved/
+
+Unaltered original readme below:
+
 # Light and Shadows. Pack of shaders and scene setup examples.
 
 Required 1.3.6 Defold version.
